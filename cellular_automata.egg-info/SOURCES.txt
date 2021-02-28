@@ -1,0 +1,5 @@
+setup.py
+cellular_automata.egg-info/PKG-INFO
+cellular_automata.egg-info/SOURCES.txt
+cellular_automata.egg-info/dependency_links.txt
+cellular_automata.egg-info/top_level.txt
