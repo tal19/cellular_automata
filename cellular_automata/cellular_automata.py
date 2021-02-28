@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+from matplotlib import pyplot
 from numbers import Number
 
 class Grid:
@@ -42,7 +42,7 @@ class Grid:
                 raise ValueError(f"Grid position {pos} cannot contain agent.")
         self.agent_grid = agent_grid
         self.distance_grid = attribute_grid[:,:][1]
-        self.decision_order = [None]*(max(attribute_grid[:,:][1])+1)
+        self.decision_order = [None]*(max(max(attribute_grid[:,:][1]))+1)
         for i in range(max(attribute_grid[:,:][1])+1):
             self.decision_order[i] = np.argwhere(a[:,:,0] == i)
         
