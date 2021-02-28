@@ -67,11 +67,22 @@ class Grid:
                                 self.distance_grid[j[0],j[1]]):
                                 options.append(k) #append empty neighbouring seats with 
                                                   #a shorter distance to the exit
-                        np.random.shuffle(options)
+                        np.random.shuffle(options) #randomly choose one of equally good seats to move to
                         self.agent_grid[j[0] + options[0][0], j[1] + options[0][0]] == 1
                         self.agent_grid[j[0],j[1]] == 0
-
                     elif self.type_grid == 3: #if agent is currently in aisle
+                        options = []
+                        for k in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
+                            if (not self.attribute_grid[j[0] + k[0], j[1] + k[1]] == 2 and
+                                not self.attribute_grid[j[0] + k[0], j[1] + k[1]] == 1
+                                and self.agent_grid[j[0] + k[0], j[1] + k[1]] == 0 and 
+                                self.distance_grid[j[0] + k[0], j[1] + k[1]] <
+                                self.distance_grid[j[0],j[1]]):
+                                options.append(k) #append empty neighbouring seats with 
+                                                  #a shorter distance to the exit
+                        np.random.shuffle(options) #randomly choose one of equally good seats to move to
+                        self.agent_grid[j[0] + options[0][0], j[1] + options[0][0]] == 1
+                        self.agent_grid[j[0],j[1]] == 0
                     
 
 
