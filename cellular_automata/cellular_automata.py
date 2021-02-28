@@ -83,6 +83,7 @@ class Grid:
                         np.random.shuffle(options) #randomly choose one of equally good seats to move to
                         self.agent_grid[j[0] + options[0][0], j[1] + options[0][0]] == 1
                         self.agent_grid[j[0],j[1]] == 0
+
                     
 
 
