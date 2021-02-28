@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+from numbers import Number
 
 class Grid:
     """Grid class that initialises the grid for cellular automata model.
@@ -84,7 +86,39 @@ class Grid:
                         self.agent_grid[j[0] + options[0][0], j[1] + options[0][0]] == 1
                         self.agent_grid[j[0],j[1]] == 0
 
-                    
+def visualise(Grid, t = "completion"):
+    """Function to visualise the cellular automata evacuation model.
+
+    Parameters
+    ----------
+    grid: Grid
+        Initialised grid ready to have evacuation run on.
+    
+    t: Integer or "completion"
+        Represents how many time steps to run model for.
+
+        If t is integer run t times.
+
+        If t = "completion", run until all agents have left plane.
+
+    Return
+    ----------
+    Return visualisation of evacuation model simulation.
+
+    """
+    if isinstance(t, Number):
+        for t in range(t):
+            pyplot.clf()
+            pyplot.matshow(grid.agent_grid, fignum=0, cmap='binary')
+            pyplot.show()
+            grid.move()
+    else:
+        while sum(sum(grid.agent_grid)) > 0:
+            pyplot.clf()
+            pyplot.matshow(grid.agent_grid, fignum=0, cmap='binary')
+            pyplot.show()
+            grid.move()
+              
 
 
 
