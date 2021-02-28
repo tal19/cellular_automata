@@ -40,5 +40,40 @@ class Grid:
                 raise ValueError(f"Grid position {pos} cannot contain agent.")
         self.agent_grid = agent_grid
         self.distance_grid = attribute_grid[:,:][1]
+        self.decision_order = [None]*(max(attribute_grid[:,:][1])+1)
+        for i in range(max(attribute_grid[:,:][1])+1):
+            self.decision_order[i] = np.argwhere(a[:,:,0] == i)
+        
+    def move(self):
+        for i in range(len(self.decision_order)):
+            np.random.shuffle(self.decision_order[i])
+            
+            if i == 0:
+                for j in self.decision_order:
+                    #agent in exit position now leaves plane
+                    if self.agent_grid[j[0], j[1]] == 1:
+                        self.agent_grid[j[0], j[1]] = 0
 
-    def 
+                
+            np.random.shuffle(self.decision_order[i])
+            for j in self.decision_order:
+                if self.agent_grid[j[0],j[1]] == 1:
+                    if self.type_grid[j[0],j[1]] == 1: #if agent is currently in a seat
+                        options = []
+                        for k in [[0,1], [0,-1]]:
+                            if (not self.attribute_grid[j[0] + k[0], j[1] + k[1]] == 2
+                                and self.agent_grid[j[0] + k[0], j[1] + k[1]] == 0 and 
+                                self.distance_grid[j[0] + k[0], j[1] + k[1]] <
+                                self.distance_grid[j[0],j[1]]):
+                                options.append(k) #append empty neighbouring seats with 
+                                                  #a shorter distance to the exit
+                        np.random.shuffle(options)
+                        self.agent_grid[j[0] + options[0][0], j[1] + options[0][0]] == 1
+                        self.agent_grid[j[0],j[1]] == 0
+
+                    elif self.type_grid == 3: #if agent is currently in aisle
+                    
+
+
+
+
