@@ -36,7 +36,7 @@ class Grid:
         self.type_grid = attribute_grid[:,:][0]
         agent_grid = np.zeros(np.shape(attribute_grid))
         for pos in agent_positions:
-            if not attribute_grid[pos[0],pos[1]] == 2:
+            if not attribute_grid[pos[0],pos[1]][1] == 2:
                 agent_grid[pos[0],pos[1]] = 1
             else:
                 raise ValueError(f"Grid position {pos} cannot contain agent.")
