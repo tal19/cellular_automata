@@ -51,16 +51,16 @@ class Grid:
             np.random.shuffle(self.decision_order[i])
             
             if i == 0:
-                for j in self.decision_order:
+                for j in self.decision_order[i]:
                     #agent in exit position now leaves plane
                     if j:
                         if self.agent_grid[j[0], j[1]] == 1:
                             self.agent_grid[j[0], j[1]] = 0
 
+            else:  
                 
-            np.random.shuffle(self.decision_order[i])
-            for j in self.decision_order:
-                if j:
+                for j in self.decision_order[i]:
+                
                     if self.agent_grid[j[0],j[1]] == 1:
                         if self.type_grid[j[0],j[1]] == 1: #if agent is currently in a seat
                             options = []
@@ -74,7 +74,7 @@ class Grid:
                             np.random.shuffle(options) #randomly choose one of equally good seats to move to
                             self.agent_grid[j[0] + options[0][0], j[1] + options[0][0]] == 1
                             self.agent_grid[j[0],j[1]] == 0
-                        elif self.type_grid == 3: #if agent is currently in aisle
+                        elif self.type_grid[j[0],j[1]] == 3: #if agent is currently in aisle
                             options = []
                             for k in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
                                 if (not self.type_grid[j[0] + k[0], j[1] + k[1]] == 2 and
