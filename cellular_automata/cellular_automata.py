@@ -70,7 +70,7 @@ class Grid:
                                     self.distance_grid[j[0] + k[0], j[1] + k[1]] <
                                     self.distance_grid[j[0],j[1]]):
                                     options.append(k) #append empty neighbouring seats with 
-                                                    #a shorter distance to the exit
+                                                      #a shorter distance to the exit
                             np.random.shuffle(options) #randomly choose one of equally good seats to move to
                             self.agent_grid[j[0] + options[0][0], j[1] + options[0][0]] == 1
                             self.agent_grid[j[0],j[1]] == 0
@@ -88,7 +88,7 @@ class Grid:
                             self.agent_grid[j[0] + options[0][0], j[1] + options[0][0]] == 1
                             self.agent_grid[j[0],j[1]] == 0
 
-def visualise(Grid, t = "completion"):
+def visualise(grid, t = "completion"):
     """Function to visualise the cellular automata evacuation model.
 
     Parameters
