@@ -53,8 +53,9 @@ class Grid:
             if i == 0:
                 for j in self.decision_order:
                     #agent in exit position now leaves plane
-                    if self.agent_grid[j[0], j[1]] == 1:
-                        self.agent_grid[j[0], j[1]] = 0
+                    if j:
+                        if self.agent_grid[j[0], j[1]] == 1:
+                            self.agent_grid[j[0], j[1]] = 0
 
                 
             np.random.shuffle(self.decision_order[i])
