@@ -106,6 +106,11 @@ def move(occupancy, x, y, direction):
             occupancy[x][y - 1] = True
     return occupancy
 
+def remove_from_exit(layout, occupancy):
+    for i in range(layout.shape[0]):
+        for j in range(layout.shape[1]):
+            if layout[i][j] == Cell.EXIT:
+                occupancy[i][j] = False
 
 # Progress the simulation by one time step.
 # Takes all three layers as input.
@@ -126,6 +131,7 @@ def make_step(layout, cost, occupancy):
                 local_cost[j] = -3      # Mark as inaccessible by occupancy.
         move(occupancy, x, y, choose_move(local_cost))
         #display_cellular_space(layout, occupancy)
+    remove_from_exit(layout, occupancy)
     return occupancy
 
 
@@ -164,14 +170,28 @@ def display_cellular_space(layout, occupancy):
 
 
 def visualisation(layout, cost, occupancy):
-    pyplot.ion()
-    while True:
-            
+    
+    while sum(sum(occupancy)) > 0:
+            pyplot.ion()
             pyplot.clf()
             pyplot.matshow(occupancy, fignum=0, cmap='binary')
             occupancy = make_step(layout, cost, occupancy)
             pyplot.show()
-           
+            pyplot.pause(0.0000005)
+    
+def run(layout, cost, occupancy):
+    count = 0
+    while sum(sum(occupancy)) > 0:
+        occupancy = make_step(layout, cost, occupancy)
+        count+= 1
+    return count
+
+def multi_run(layout, cost, occupancy, n=100):
+    count_list = []
+    for i in range(n):
+        grid = copy.copy(occupancy)
+        count_list.append(run(layout, cost, grid))
+    return count_list
 
 
 # A dataclass that collects the boundary conditions.
@@ -238,3 +258,4 @@ o = np.array([[False, True, True, True, False, True, True, True, False],
                 [False, False, False, False, False, False, False, False, False],
                 [False, False, False, False, False, False, False, False, False]])
 visualisation(l, c, o)
+#print(max(multi_run(l, c, o)))
