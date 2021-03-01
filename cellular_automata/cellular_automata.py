@@ -33,7 +33,7 @@ class Grid:
     """
 
     def __init__(self, attribute_grid, agent_positions):
-        self.type_grid = attribute_grid[:,:][0]
+        self.type_grid = attribute_grid[:,:, 0]
         agent_grid = np.zeros(np.shape(attribute_grid[:,:,0]))
         for pos in agent_positions:
             if not attribute_grid[pos[0],pos[1]][0] == 2:
@@ -44,7 +44,7 @@ class Grid:
         self.distance_grid = attribute_grid[:,:,1]
         self.decision_order = [None]*(np.amax(attribute_grid[:,:,1])+1)
         for i in range(np.amax(attribute_grid[:,:,1])+1):
-            self.decision_order[i] = np.argwhere(attribute_grid[:,:,0] == i)
+            self.decision_order[i] = np.argwhere(attribute_grid[:,:,1] == i)
         
     def move(self):
         for i in range(len(self.decision_order)):
@@ -53,9 +53,8 @@ class Grid:
             if i == 0:
                 for j in self.decision_order[i]:
                     #agent in exit position now leaves plane
-                    if j:
-                        if self.agent_grid[j[0], j[1]] == 1:
-                            self.agent_grid[j[0], j[1]] = 0
+                    if self.agent_grid[j[0], j[1]] == 1:
+                        self.agent_grid[j[0], j[1]] = 0
 
             else:  
                 
@@ -65,15 +64,17 @@ class Grid:
                         if self.type_grid[j[0],j[1]] == 1: #if agent is currently in a seat
                             options = []
                             for k in [[0,1], [0,-1]]:
-                                if (not self.type_grid[j[0] + k[0], j[1] + k[1]] == 2
-                                    and self.agent_grid[j[0] + k[0], j[1] + k[1]] == 0 and 
-                                    self.distance_grid[j[0] + k[0], j[1] + k[1]] <
-                                    self.distance_grid[j[0],j[1]]):
+                                if ((not self.type_grid[j[0] + k[0], j[1] + k[1]] == 2)
+                                    and (self.agent_grid[j[0] + k[0], j[1] + k[1]] == 0) and 
+                                    (self.distance_grid[j[0] + k[0], j[1] + k[1]] <
+                                    self.distance_grid[j[0],j[1]])):
                                     options.append(k) #append empty neighbouring seats with 
-                                                      #a shorter distance to the exit
-                            np.random.shuffle(options) #randomly choose one of equally good seats to move to
-                            self.agent_grid[j[0] + options[0][0], j[1] + options[0][0]] == 1
-                            self.agent_grid[j[0],j[1]] == 0
+                            if options:                         #a shorter distance to the exit
+                                np.random.shuffle(options)
+                                print(options) #randomly choose one of equally good seats to move to
+                                print((j[0] + options[0][0] ,j[1] + options[0][1]))
+                                self.agent_grid[j[0] + options[0][0], j[1] + options[0][1]] = 1
+                                self.agent_grid[j[0],j[1]] = 0
                         elif self.type_grid[j[0],j[1]] == 3: #if agent is currently in aisle
                             options = []
                             for k in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
@@ -84,11 +85,12 @@ class Grid:
                                     self.distance_grid[j[0],j[1]]):
                                     options.append(k) #append empty neighbouring seats with 
                                                     #a shorter distance to the exit
-                            np.random.shuffle(options) #randomly choose one of equally good seats to move to
-                            self.agent_grid[j[0] + options[0][0], j[1] + options[0][0]] == 1
-                            self.agent_grid[j[0],j[1]] == 0
+                            if options:
+                                np.random.shuffle(options) #randomly choose one of equally good seats to move to
+                                self.agent_grid[j[0] + options[0][0], j[1] + options[0][1]] = 1
+                                self.agent_grid[j[0],j[1]] = 0
 
-def visualise(grid, t = "completion"):
+def visualise(grid):
     """Function to visualise the cellular automata evacuation model.
 
     Parameters
@@ -108,18 +110,13 @@ def visualise(grid, t = "completion"):
     Return visualisation of evacuation model simulation.
 
     """
-    if isinstance(t, Number):
-        for t in range(t):
-            pyplot.clf()
-            pyplot.matshow(grid.agent_grid, fignum=0, cmap='binary')
-            pyplot.show()
-            grid.move()
-    else:
-        while sum(sum(grid.agent_grid)) > 0:
-            pyplot.clf()
-            pyplot.matshow(grid.agent_grid, fignum=0, cmap='binary')
-            pyplot.show()
-            grid.move()
+    while sum(sum(grid.agent_grid)) > 0:
+        pyplot.ion()
+        pyplot.clf()
+        pyplot.matshow(grid.agent_grid, fignum=0, cmap='binary')
+        pyplot.show()
+        grid.move()
+        pyplot.pause(0.5)
               
 
 
