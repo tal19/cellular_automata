@@ -4,6 +4,7 @@ import enum
 import numpy as np
 import random
 import time
+from matplotlib import pyplot
 
 
 # Makes a step based on local costs.
@@ -124,7 +125,7 @@ def make_step(layout, cost, occupancy):
             if (not vacant[j]) and local_cost[j] >= 0:
                 local_cost[j] = -3      # Mark as inaccessible by occupancy.
         move(occupancy, x, y, choose_move(local_cost))
-        display_cellular_space(layout, occupancy)
+        #display_cellular_space(layout, occupancy)
     return occupancy
 
 
@@ -160,6 +161,17 @@ def display_cellular_space(layout, occupancy):
     line += "╝"
     print(line)
     time.sleep(0.1)
+
+
+def visualisation(layout, cost, occupancy):
+    pyplot.ion()
+    while True:
+            
+            pyplot.clf()
+            pyplot.matshow(occupancy, fignum=0, cmap='binary')
+            occupancy = make_step(layout, cost, occupancy)
+            pyplot.show()
+           
 
 
 # A dataclass that collects the boundary conditions.
@@ -215,15 +227,14 @@ l_c_t = {"this": Cell.SEAT, "up": Cell.SEAT, "right": Cell.SEAT,
          "down": Cell.SEAT, "left": Cell.SEAT}
 l_o = {"this": True, "up": True, "right": False, "down": False, "left": False}
 # Test lines
-while True:
-    o = np.array([[False, True, True, True, False, True, True, True, False],
-                  [False, True, True, True, False, True, True, True, False],
-                  [False, True, True, True, False, True, True, True, False],
-                  [False, True, True, True, False, True, True, True, False],
-                  [False, True, True, True, False, True, True, True, False],
-                  [False, True, True, True, False, True, True, True, False],
-                  [False, False, False, False, False, False, False, False, False],
-                  [False, False, False, False, False, False, False, False, False],
-                  [False, False, False, False, False, False, False, False, False]])
-    display_cellular_space(l, o)
-    make_step(l, c, o)
+#while True:
+o = np.array([[False, True, True, True, False, True, True, True, False],
+                [False, True, True, True, False, True, True, True, False],
+                [False, True, True, True, False, True, True, True, False],
+                [False, True, True, True, False, True, True, True, False],
+                [False, True, True, True, False, True, True, True, False],
+                [False, True, True, True, False, True, True, True, False],
+                [False, False, False, False, False, False, False, False, False],
+                [False, False, False, False, False, False, False, False, False],
+                [False, False, False, False, False, False, False, False, False]])
+visualisation(l, c, o)
