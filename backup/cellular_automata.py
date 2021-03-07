@@ -18,7 +18,7 @@ class Grid:
         4 = exit
 
         In second position, integer denoting shortest distance to exit from
-        that square is given.
+        that square is given, this is a hard coded input(for now).
     
     agent_positions : array
         The list of initial position tuples (column, row) for agents on plane.

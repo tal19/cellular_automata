@@ -1,7 +1,7 @@
 setup.cfg
 setup.py
 cellular_automata/__init__.py
-cellular_automata/cellular_automata.py
+cellular_automata/cellular_automata_group.py
 cellular_automata.egg-info/PKG-INFO
 cellular_automata.egg-info/SOURCES.txt
 cellular_automata.egg-info/dependency_links.txt
