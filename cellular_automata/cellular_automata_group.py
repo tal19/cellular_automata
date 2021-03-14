@@ -32,6 +32,12 @@ class Grid:
         #                          cannot contain agent.")
         self.occupancy = agent_positions
         self.cost = distance_grid
+        self.reaction_time = np.zeros(np.shape(layout))
+        for i in range(np.shape(layout)[0]):
+            for j in range(np.shape(layout)[1]):
+                if self.occupancy[i][j]:
+                    self.reaction_time[i][j] = np.random.choice(
+                        [i for i in range(10)], size=1)
 
     def get_local_cost(self, x, y):
         """Return the local cells cost, i.e. this + neighbour.
@@ -127,19 +133,22 @@ class Grid:
             np.random.permutation(np.argwhere(self.occupancy))
             )  # randomly order agents
         for i in range(agents.shape[1]):    # Cycle through each agents
-            x = agents[0][i]
-            y = agents[1][i]                # Obtain the coordinates
-            local_cost = self.get_local_cost(x, y)  # Obtain the raw local cost
-            accessible = check_boundaries(self.get_local_layout(x, y))
-            for j in accessible:
-                if not accessible[j] and local_cost[j] >= 0:
-                    local_cost[j] = -2      # Mark as inaccessible
-            vacant = check_vacancies(self.get_local_occupancy(x, y))
-            for j in vacant:
-                if (not vacant[j]) and local_cost[j] >= 0:
-                    local_cost[j] = -3      # Mark as inaccessible
-            self.move(x, y, choose_move(local_cost))
-            # display_cellular_space(layout, occupancy)
+            if not self.reaction_time[agents[0][i], agents[1][i]]:
+                x = agents[0][i]
+                y = agents[1][i]                # Obtain the coordinates
+                local_cost = self.get_local_cost(x, y)  # Obtain local cost
+                accessible = check_boundaries(self.get_local_layout(x, y))
+                for j in accessible:
+                    if not accessible[j] and local_cost[j] >= 0:
+                        local_cost[j] = -2      # Mark as inaccessible
+                vacant = check_vacancies(self.get_local_occupancy(x, y))
+                for j in vacant:
+                    if (not vacant[j]) and local_cost[j] >= 0:
+                        local_cost[j] = -3      # Mark as inaccessible
+                self.move(x, y, choose_move(local_cost))
+                # display_cellular_space(layout, occupancy)
+            else:
+                self.reaction_time[agents[0][i], agents[1][i]] -= 1
         self.remove_from_exit()
 
 
