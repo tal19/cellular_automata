@@ -33,11 +33,13 @@ class Grid:
         self.occupancy = agent_positions
         self.cost = distance_grid
         self.reaction_time = np.zeros(np.shape(layout))
+        # add a random reaction time for each agent
         for i in range(np.shape(layout)[0]):
             for j in range(np.shape(layout)[1]):
                 if self.occupancy[i][j]:
-                    self.reaction_time[i][j] = np.random.choice(
-                        [i for i in range(10)], size=1)
+                    self.reaction_time[i][j] = abs(np.random.normal(
+                        loc=13, scale=1.5)//1)
+        self.leaving = 0
 
     def get_local_cost(self, x, y):
         """Return the local cells cost, i.e. this + neighbour.
@@ -120,6 +122,7 @@ class Grid:
         for i in range(self.layout.shape[0]):
             for j in range(self.layout.shape[1]):
                 if self.layout[i][j] == Cell.EXIT:
+                    self.leaving = 1  # slide in use
                     self.occupancy[i][j] = False
 
     def make_step(self):
@@ -129,6 +132,7 @@ class Grid:
         Only modifies the the occupancy layer.
         """
 
+        self.leaving = 0  # reset slide data
         agents = np.transpose(
             np.random.permutation(np.argwhere(self.occupancy))
             )  # randomly order agents
@@ -277,7 +281,10 @@ def timer(grid):
     count = 0
     while sum(sum(grid.occupancy)) > 0:
         grid.make_step()
-        count += 1
+        if grid.leaving == 1:
+            count += .475
+        else:
+            count += .312
     return count
 
 
