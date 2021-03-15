@@ -6,6 +6,7 @@ The space is represented by the `Grid` class, with three grids of matching dimen
 * Layout: The properties of all cells, mainly the accessibility. Four different types of cells were implemented in our model, encapsulated in the `Cell` enum.
 * Cost/Distance: The distance of the cell to the closest `EXIT`. For all inaccessible cells, the distance is `-1`. Currently this has to be manually mapped.
 * Occupancy: Whether a cell is occupied by an agent at the start of simulation or not. 
+
 For simulation, simply pass the three grids to the visualisation function:
 ```Python
 import cellular_automata.cellular_automata_group
