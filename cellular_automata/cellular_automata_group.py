@@ -9,7 +9,8 @@ from matplotlib import pyplot
 class Grid:
     """Grid class to model evacuation using 3 grids."""
 
-    def __init__(self, layout, distance_grid, agent_positions):
+    def __init__(self, layout, distance_grid, agent_positions,
+                 rt_mean=25, rt_variance=10):
         """Initialise 3 arrays.
 
         Layout: array
@@ -38,7 +39,7 @@ class Grid:
             for j in range(np.shape(layout)[1]):
                 if self.occupancy[i][j]:
                     self.reaction_time[i][j] = abs(np.random.normal(
-                        loc=13, scale=1.5)//1)
+                        loc=rt_mean, scale=rt_variance)//1)
         self.leaving = 0
 
     def get_local_cost(self, x, y):
@@ -288,12 +289,12 @@ def timer(grid):
     return count
 
 
-def multi_timer(layout, cost, occupancy, n=100):
+def multi_timer(layout, cost, occupancy, rt_mean=25, rt_variance=10, n=100):
     """Returns list of n time results from timer."""
 
     count_list = []
     for i in range(n):
         o = copy.copy(occupancy)
-        grid = Grid(layout, cost, o)
+        grid = Grid(layout, cost, o, rt_mean, rt_variance)
         count_list.append(timer(grid))
     return count_list
